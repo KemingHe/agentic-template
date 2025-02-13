@@ -1,4 +1,3 @@
-from setup_app import setup_page, print_hello
+from setup_app import setup_page
 
 setup_page()
-print_hello()

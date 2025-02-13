@@ -1,14 +1,14 @@
 import streamlit as st
 
-
-def setup_page():
+def setup_page(
+        app_icon: str = "📝",
+        app_name: str = "Agentic Template",
+        page_title: str = "Simple Chatbot",
+        page_description: str = "This is a simple chatbot using LangChain and OpenAI.",
+) -> None:
     st.set_page_config(
-        page_icon="📝",
-        page_title="Agentic Template",
+        page_title=app_name,
+        page_icon=app_icon,
     )
-    st.title("Hello World!")
-    st.info("Welcome to the Agentic Template.")
-
-
-def print_hello():
-    st.write("Hello, world!")
+    st.title(page_title)
+    st.info(page_description)

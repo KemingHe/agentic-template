@@ -1,6 +1,7 @@
 from duckduckgo_search import DDGS
 import json
 
+
 def simple_search(
     query: str,
     count: int = 3,

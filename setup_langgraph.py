@@ -55,8 +55,7 @@ workflow.add_edge(START, "first_agent")
 
 # Add conditional edges from first agent: either to tools or end
 workflow.add_conditional_edges(
-    "first_agent",
-    lambda state: "tools" if state["messages"][-1].tool_calls else END
+    "first_agent", lambda state: "tools" if state["messages"][-1].tool_calls else END
 )
 
 # After tools, always go to final agent for response

@@ -22,7 +22,8 @@ dependencies = [
   "langgraph (>=0.2.70,<0.3.0)",
   "langsmith (>=0.3.8,<0.4.0)",
   "duckduckgo-search (>=7.3.2,<8.0.0)",
-  "pydantic (>=2.10.6,<3.0.0)"
+  "pydantic (>=2.10.6,<3.0.0)",
+  "httpx (>=0.28.1,<0.29.0)"
 ]
 
 [project.urls]

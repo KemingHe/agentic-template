@@ -14,6 +14,7 @@ from typing import Iterator
 
 from setup_duckduckgo import simple_search
 from setup_openai import openai_regular_model
+from setup_weatherapi import get_weather_data
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser
@@ -21,9 +22,11 @@ from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser
 
 
 class SearchTask(BaseModel):
-    shoud_run: bool = Field(description="Whether it is necessary to search the web for the query.")
-    query: str = Field(description="The reformatted user query to search the web for, optimized for web search.")
-    count: int = Field(description="The number of search results to return.")
+    should_search_web: bool = Field(description="Whether it is necessary to search the web for the query, excluding weather queries.")
+    should_search_weather: bool = Field(description="Whether it is necessary to search the weather for the query.")
+    web_query: str = Field(description="The reformatted user query to search the web for, optimized for web search, excluding weather queries.")
+    web_query_count: int = Field(description="The number of search results to return.")
+    weather_query: str = Field(description="The location, preferrably the city (or zipcode if user query is too generalized) to search the weather for.")
 
 orchestrator_parser = PydanticOutputParser(pydantic_object=SearchTask)
 
@@ -31,12 +34,12 @@ orchastrator_template: str = """
 You are a helpful assistant that resolves the user's query step by step:
 
 1. Reformats the user query and message history into a context-rich query, always prefer hard facts over general directions
-2. Decides whether to search the web for the query, and if so, how many results to return
+2. Decides whether to search the web or weather for the query, and if so, which tools to use and how many results to return
 
 You are provided with the following information:
 
-- Chat history: {chat_history}
 - User query: {user_query}
+- Chat history: {chat_history}
 
 {format_instructions}
 
@@ -62,9 +65,10 @@ You are a helpful assistant that can:
 
 You are provided with the following information:
 
-- Chat history: {chat_history}
 - User query: {user_query}
-- Search results: {search_results}
+- Chat history: {chat_history}
+- Web search results: {web_search_results}
+- Weather search results: {weather_search_results}
 """
 
 summarizer_prompt = ChatPromptTemplate.from_template(summarizer_template)
@@ -74,26 +78,31 @@ def get_response_stream(
     chat_history: str,
 ) -> Iterator[str]:
     search_task = orchestrator_chain.invoke({
-        "chat_history": chat_history,
         "user_query": user_query,
+        "chat_history": chat_history,
     })
 
     print(search_task)
 
-    search_results: str | None = None
-    if search_task.shoud_run:
-        search_results = simple_search(
-            query=search_task.query,
-            count=search_task.count,
+    web_search_results: str | None = None
+    if search_task.should_search_web:
+        web_search_results = simple_search(
+            query=search_task.web_query,
+            count=search_task.web_query_count,
         )
     
-    print(search_results)
+    print(web_search_results)
 
-    search_chain = summarizer_prompt | openai_regular_model | StrOutputParser()
-    return search_chain.stream({
-        "chat_history": chat_history,
+    weather_search_results: str | None = None
+    if search_task.should_search_weather:
+        weather_search_results = get_weather_data(search_task.weather_query)
+
+    summarizer_chain = summarizer_prompt | openai_regular_model | StrOutputParser()
+    return summarizer_chain.stream({
         "user_query": user_query,
-        "search_results": search_results,
+        "chat_history": chat_history,
+        "web_search_results": web_search_results,
+        "weather_search_results": weather_search_results,
     })
 
 

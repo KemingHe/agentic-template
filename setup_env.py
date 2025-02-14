@@ -1,6 +1,7 @@
 """Environment configuration and validation for the application"""
 
 from os import getenv
+from warnings import warn
 from dotenv import load_dotenv
 
 
@@ -30,7 +31,7 @@ def validate_env(env_name: str) -> str:
 
 # Verify environment file is loaded
 if not load_dotenv():
-    raise RuntimeError("Failed to load .env file")
+    warn("No .env file found, assuming environment variables are injected")
 
 
 # OpenAI configuration

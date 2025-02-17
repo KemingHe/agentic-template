@@ -4,9 +4,9 @@ import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 
 
-def init_chat_history() -> None:
-    if "chat_history" not in st.session_state:
-        st.session_state.chat_history = []
+def init_chat_history(history_key: str = "chat_history") -> None:
+    if history_key not in st.session_state:
+        st.session_state[history_key] = []
 
 
 def render_chat_messages(messages: List[HumanMessage | AIMessage]) -> None:
@@ -25,7 +25,7 @@ def is_valid_query(user_query: str) -> bool:
 
 
 # TODO: strongly type the get_response_stream function
-def setup_chat(get_response_stream) -> None:
+def setup_simple_chat(get_response_stream) -> None:
     init_chat_history()
 
     # Alias the chat history from the session state

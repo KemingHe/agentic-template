@@ -3,6 +3,7 @@ from warnings import warn
 
 from dotenv import load_dotenv
 
+
 def validate_env(env_name: str) -> str:
     """
     Validate that an environment variable exists and is not empty
@@ -25,6 +26,7 @@ def validate_env(env_name: str) -> str:
         raise ValueError(f"Environment variable {env_name} cannot be empty")
 
     return value
+
 
 # Verify .env file is correctly loaded
 if not load_dotenv():

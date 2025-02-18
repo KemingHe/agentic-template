@@ -2,7 +2,10 @@ import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 
 from components.chat_ui import init_chat_history, is_valid_query
-from chains.web_search_chain import get_simple_response_stream, get_web_search_response_stream
+from chains.web_search_chain import (
+    get_simple_response_stream,
+    get_web_search_response_stream,
+)
 from components.page_ui import setup_page
 
 setup_page(

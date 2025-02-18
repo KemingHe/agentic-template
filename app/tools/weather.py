@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 from config.envs import WEATHERAPI_API_KEY
 
+
 def normalize_forcast_days(forcast_days: int, max_days: int = 3) -> int:
     if forcast_days > 0:
         if forcast_days <= max_days:
@@ -15,11 +16,16 @@ def normalize_forcast_days(forcast_days: int, max_days: int = 3) -> int:
             return max_days
     return 0
 
+
 def get_weather_data(location: str, forcast_days: int = 0) -> str:
     normalized_forcast_days: int = normalize_forcast_days(forcast_days)
 
-    current_endpoint: str = f"https://api.weatherapi.com/v1/current.json?key={WEATHERAPI_API_KEY}"
-    forcast_endpoint: str = f"https://api.weatherapi.com/v1/forecast.json?key={WEATHERAPI_API_KEY}"
+    current_endpoint: str = (
+        f"https://api.weatherapi.com/v1/current.json?key={WEATHERAPI_API_KEY}"
+    )
+    forcast_endpoint: str = (
+        f"https://api.weatherapi.com/v1/forecast.json?key={WEATHERAPI_API_KEY}"
+    )
 
     location_param: str = f"&q={location}"
     forcast_days_param: str = f"&days={normalized_forcast_days}"
@@ -28,14 +34,21 @@ def get_weather_data(location: str, forcast_days: int = 0) -> str:
 
     response: Response | None = None
     if normalized_forcast_days > 0:
-        response = get(forcast_endpoint + location_param + forcast_days_param + air_quality_param + alerts_param)
+        response = get(
+            forcast_endpoint
+            + location_param
+            + forcast_days_param
+            + air_quality_param
+            + alerts_param
+        )
     else:
         response = get(current_endpoint + location_param + air_quality_param)
 
-    if response and response.status_code == 200: 
+    if response and response.status_code == 200:
         return json.dumps(response.json(), indent=2)
-    
+
     return "Failed to fetch weather data from WeatherAPI."
+
 
 class WeatherInput(BaseModel):
     location: str = Field(
@@ -45,8 +58,9 @@ class WeatherInput(BaseModel):
         default=0,
         description="Number of forecast days (0-3). Use 0 for current weather only, 1-3 for forecast",
         ge=0,
-        le=3
+        le=3,
     )
+
 
 class WeatherTool(BaseTool):
     name: str = "Weather Tool"

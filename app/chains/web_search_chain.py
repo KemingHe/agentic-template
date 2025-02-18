@@ -7,6 +7,7 @@ from tools.web_search import ddg_text_search
 from llms.openai import openai_regular_model
 from tools.weather import get_weather_data
 
+
 class SearchTask(BaseModel):
     should_search_web: bool = Field(
         description="Set to true if factual information needs to be searched online"
@@ -113,6 +114,7 @@ simple_summarizer_chain = (
     simple_summarizer_prompt | openai_regular_model | StrOutputParser()
 )
 
+
 # ------------------------------------------------------------------------------
 def get_web_search_response_stream(
     user_query: str,
@@ -150,6 +152,7 @@ def get_web_search_response_stream(
             "weather_search_results": weather_search_results,
         }
     )
+
 
 # ------------------------------------------------------------------------------
 def get_simple_response_stream(

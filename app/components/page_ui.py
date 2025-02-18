@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 def setup_page(
     app_icon: str = "📝",
     app_name: str = "Agentic Template",
@@ -12,4 +13,3 @@ def setup_page(
     )
     st.title(page_title)
     st.info(page_description)
-    

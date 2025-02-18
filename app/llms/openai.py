@@ -1,6 +1,6 @@
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
-from setup_env import OPENAI_API_KEY, OPENAI_LITE_MODEL_ID, OPENAI_REGULAR_MODEL_ID
+from config.envs import OPENAI_API_KEY, OPENAI_LITE_MODEL_ID, OPENAI_REGULAR_MODEL_ID
 
 openai_embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
 openai_lite_model = ChatOpenAI(

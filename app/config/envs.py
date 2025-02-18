@@ -1,9 +1,7 @@
-"""Environment configuration and validation for the application"""
-
 from os import getenv
 from warnings import warn
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 
 def validate_env(env_name: str) -> str:
     """
@@ -28,8 +26,7 @@ def validate_env(env_name: str) -> str:
 
     return value
 
-
-# Verify environment file is loaded
+# Verify .env file is correctly loaded
 if not load_dotenv():
     warn("No .env file found, assuming environment variables are injected")
 

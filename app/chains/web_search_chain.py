@@ -3,12 +3,10 @@ from typing import Iterator
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser
 
-from setup_duckduckgo import simple_search
-from setup_openai import openai_regular_model
-from setup_weatherapi import get_weather_data
+from tools.web_search import ddg_text_search
+from llms.openai import openai_regular_model
+from tools.weather import get_weather_data
 
-
-# ------------------------------------------------------------------------------
 class SearchTask(BaseModel):
     should_search_web: bool = Field(
         description="Set to true if factual information needs to be searched online"
@@ -115,7 +113,6 @@ simple_summarizer_chain = (
     simple_summarizer_prompt | openai_regular_model | StrOutputParser()
 )
 
-
 # ------------------------------------------------------------------------------
 def get_web_search_response_stream(
     user_query: str,
@@ -132,7 +129,7 @@ def get_web_search_response_stream(
 
     web_search_results: str | None = None
     if search_task.should_search_web:
-        web_search_results = simple_search(
+        web_search_results = ddg_text_search(
             query=search_task.web_query,
             count=search_task.web_query_count,
         )
@@ -153,7 +150,6 @@ def get_web_search_response_stream(
             "weather_search_results": weather_search_results,
         }
     )
-
 
 # ------------------------------------------------------------------------------
 def get_simple_response_stream(

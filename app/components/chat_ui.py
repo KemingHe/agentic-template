@@ -3,11 +3,9 @@ from typing import List
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 
-
 def init_chat_history(history_key: str = "chat_history") -> None:
     if history_key not in st.session_state:
         st.session_state[history_key] = []
-
 
 def render_chat_messages(messages: List[HumanMessage | AIMessage]) -> None:
     for message in messages:
@@ -19,10 +17,8 @@ def render_chat_messages(messages: List[HumanMessage | AIMessage]) -> None:
                 st.markdown(message.content)
     # Add custom message rendering if needed
 
-
 def is_valid_query(user_query: str) -> bool:
     return user_query is not None and user_query.strip() != ""
-
 
 # TODO: strongly type the get_response_stream function
 def setup_simple_chat(get_response_stream) -> None:

@@ -33,16 +33,12 @@ repository = "https://github.com/KemingHe/agentic-template"
 documentation = "https://github.com/KemingHe/agentic-template/blob/main/README.md"
 "Bug Tracker" = "https://github.com/KemingHe/agentic-template/issues"
 
-[project.scripts]
-start = "streamlit run app/homepage.py"
-
 [tool.poetry]
 package-mode = false
 requires-poetry = ">2.0"
 
 [tool.poetry.group.dev.dependencies]
 watchdog = "^6.0.0"
-
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"

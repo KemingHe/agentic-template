@@ -17,7 +17,7 @@ def ddg_text_search(
 
     Args:
         query: Search query string
-        query_count: Number of results to return (1-10)
+        query_count: Number of results to return (3-10)
         region: Region code for search results (e.g., "us-en", "uk-en")
         time_limit: Time filter ("d" for day, "w" for week, "m" for month, "y" for year)
     """
@@ -42,8 +42,8 @@ class DDGTextSearchInput(BaseModel):
     query: str = Field(description="The search query to use for the text search")
     query_count: int = Field(
         default=3,
-        description="The number of search results to return (1-10)",
-        ge=1,
+        description="The number of search results to return (3-10)",
+        ge=3,
         le=10,
     )
     region: str = Field(

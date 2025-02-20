@@ -24,7 +24,8 @@ dependencies = [
   "duckduckgo-search (>=7.3.2,<8.0.0)",
   "pydantic (>=2.10.6,<3.0.0)",
   "httpx (>=0.28.1,<0.29.0)",
-  "pyarrow (==19.0.0)" # Error in 19.0.1: Unable to find installation candidates
+  "pyarrow (==19.0.0)", # Error in 19.0.1: Unable to find installation candidates
+  "langchain-groq (>=0.2.4,<0.3.0)"
 ]
 
 [project.urls]
@@ -43,6 +44,7 @@ watchdog = "^6.0.0"
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"
 pytest-mock = "^3.14.0"
+pytest-benchmark = "^5.1.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

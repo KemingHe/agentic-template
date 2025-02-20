@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, Callable, Iterator
 
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.runnables import Runnable
 
 
 def init_chat_history(history_key: str = "chat_history") -> None:
@@ -25,7 +26,10 @@ def is_valid_query(user_query: str) -> bool:
 
 
 # TODO: strongly type the get_response_stream function
-def setup_simple_chat(get_response_stream) -> None:
+def setup_simple_chat(
+    llm: Runnable,
+    get_response_stream: Callable[..., Iterator[str]],
+) -> None:
     init_chat_history()
 
     # Alias the chat history from the session state
@@ -42,7 +46,11 @@ def setup_simple_chat(get_response_stream) -> None:
             st.markdown(user_query)
 
         with st.chat_message("ai"):
-            response_stream = get_response_stream(user_query, chat_history)
+            response_stream = get_response_stream(
+                llm=llm,
+                user_query=user_query,
+                chat_history=chat_history,
+            )
             ai_response = st.write_stream(response_stream)
 
         # Append the full AI response to the chat history

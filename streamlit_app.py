@@ -1,10 +1,13 @@
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 
+from llms.groq import groq_llama_regular_model
+
+# from llms.openai import openai_regular_model
 from components.chat_ui import init_chat_history, is_valid_query
 from chains.web_search_chain import (
-    get_simple_response_stream,
-    get_web_search_response_stream,
+    get_simple_chain_response_stream,
+    get_web_search_chain_response_stream,
 )
 from components.page_ui import setup_page
 
@@ -37,7 +40,11 @@ with demo_container:
                 st.markdown(user_query)
             with st.chat_message("ai"):
                 simple_response = st.write_stream(
-                    get_simple_response_stream(user_query, simple_chat_history)
+                    get_simple_chain_response_stream(
+                        llm=groq_llama_regular_model,
+                        user_query=user_query,
+                        chat_history=simple_chat_history,
+                    )
                 )
                 simple_chat_history.append(AIMessage(simple_response))
 
@@ -47,6 +54,10 @@ with demo_container:
                 st.markdown(user_query)
             with st.chat_message("ai"):
                 web_response = st.write_stream(
-                    get_web_search_response_stream(user_query, web_search_chat_history)
+                    get_web_search_chain_response_stream(
+                        llm=groq_llama_regular_model,
+                        user_query=user_query,
+                        chat_history=web_search_chat_history,
+                    )
                 )
                 web_search_chat_history.append(AIMessage(web_response))

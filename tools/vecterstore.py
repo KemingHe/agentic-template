@@ -5,8 +5,8 @@ from langchain_core.documents import Document
 from langchain_pinecone import PineconeVectorStore
 from pinecone import Pinecone
 
-from app.llms.openai import openai_embeddings
-from app.config.envs import PINECONE_API_KEY, PINECONE_INDEX_NAME
+from llms.openai import openai_embeddings
+from config.envs import PINECONE_API_KEY, PINECONE_INDEX_NAME
 
 pc = Pinecone(api_key=PINECONE_API_KEY)
 pc_index = pc.Index(name=PINECONE_INDEX_NAME)

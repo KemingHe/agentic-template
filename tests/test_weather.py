@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from app.tools.weather import get_weather_data
+from tools.weather import get_weather_data
 
 
 @pytest.fixture
@@ -33,7 +33,7 @@ def forecast_response(weather_response):
 def test_get_forecast_weather_success(mocker, forecast_response):
     mock_response = mocker.Mock(status_code=200)
     mock_response.json.return_value = forecast_response
-    mock_get = mocker.patch("app.tools.weather.get", return_value=mock_response)
+    mock_get = mocker.patch("tools.weather.get", return_value=mock_response)
 
     result = get_weather_data("London", 2)
     expected = json.dumps(forecast_response, indent=2)
@@ -45,14 +45,14 @@ def test_get_forecast_weather_success(mocker, forecast_response):
 
 def test_get_weather_invalid_location(mocker):
     mock_response = mocker.Mock(status_code=404)
-    mocker.patch("app.tools.weather.get", return_value=mock_response)
+    mocker.patch("tools.weather.get", return_value=mock_response)
 
     result = get_weather_data("InvalidLocation")
     assert result == "Failed to fetch weather data from WeatherAPI."
 
 
 def test_get_weather_api_error(mocker):
-    mocker.patch("app.tools.weather.get", return_value=None)
+    mocker.patch("tools.weather.get", return_value=None)
 
     result = get_weather_data("London")
     assert result == "Failed to fetch weather data from WeatherAPI."
@@ -68,7 +68,7 @@ def test_normalize_forecast_days_limits(mocker):
         (-1, 0),  # Invalid negative days
     ]
 
-    mock_get = mocker.patch("app.tools.weather.get")
+    mock_get = mocker.patch("tools.weather.get")
     for input_days, expected_days in test_cases:
         get_weather_data("London", input_days)
         if expected_days > 0:

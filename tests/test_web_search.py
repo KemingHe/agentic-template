@@ -6,7 +6,7 @@ from langchain_core.runnables import Runnable
 
 # from llms.groq import groq_llama_regular_model
 from llms.openai import openai_regular_model
-from chains.web_search_chain import get_web_search_chain_response_stream
+from chains.web_search import get_single_web_search_chain_response_stream
 # from agents.web_search_agent import get_web_search_agent_response_stream
 
 
@@ -37,7 +37,7 @@ def create_stream_runner(llm: Runnable) -> Callable:
         query: str = "What is the weather in Beijing?"
         chat_history: str = ""
 
-        stream: Iterator[str] = get_web_search_chain_response_stream(
+        stream: Iterator[str] = get_single_web_search_chain_response_stream(
             llm=llm, user_query=query, chat_history=chat_history, track_metrics=False
         )
         # Consume first chunk to measure TTFB

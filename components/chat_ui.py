@@ -27,7 +27,8 @@ def is_valid_query(user_query: str) -> bool:
 
 # TODO: strongly type the get_response_stream function
 def setup_simple_chat(
-    llm: Runnable,
+    orchestrator_llm: Runnable,
+    summarizer_llm: Runnable,
     get_response_stream: Callable[..., Iterator[str]],
 ) -> None:
     init_chat_history()
@@ -47,7 +48,8 @@ def setup_simple_chat(
 
         with st.chat_message("ai"):
             response_stream = get_response_stream(
-                llm=llm,
+                orchestrator_llm=orchestrator_llm,
+                summarizer_llm=summarizer_llm,
                 user_query=user_query,
                 chat_history=chat_history,
             )

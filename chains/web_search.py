@@ -1,10 +1,8 @@
 from typing import Iterator
 from time import perf_counter
 from pprint import pprint
-# import logging
 
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import Runnable
 
 from tools.web_search import ddg_text_search
 from tools.weather import get_weather_data
@@ -18,15 +16,19 @@ from prompts.multi_task import (
     multi_task_orchestrator_parser,
 )
 from prompts.summarizer import summarizer_prompt, simple_summarizer_prompt
+from chains.types import ChainConfig, ChainInputs
 
 
 def get_multi_web_search_chain_response_stream(
-    orchestrator_llm: Runnable,
-    summarizer_llm: Runnable,
-    user_query: str,
-    chat_history: str,
-    track_metrics: bool = True,
+    config: ChainConfig,
+    inputs: ChainInputs,
 ) -> Iterator[str]:
+    orchestrator_llm = config.orchestrator_llm
+    summarizer_llm = config.summarizer_llm
+    track_metrics = config.track_metrics
+    user_query = inputs.user_query
+    chat_history = inputs.chat_history
+
     start_time: float | None = perf_counter() if track_metrics else None
 
     orchestrator_chain = (
@@ -86,12 +88,15 @@ def get_multi_web_search_chain_response_stream(
 
 
 def get_single_web_search_chain_response_stream(
-    orchestrator_llm: Runnable,
-    summarizer_llm: Runnable,
-    user_query: str,
-    chat_history: str,
-    track_metrics: bool = True,
+    config: ChainConfig,
+    inputs: ChainInputs,
 ) -> Iterator[str]:
+    orchestrator_llm = config.orchestrator_llm
+    summarizer_llm = config.summarizer_llm
+    track_metrics = config.track_metrics
+    user_query = inputs.user_query
+    chat_history = inputs.chat_history
+
     start_time: float | None = perf_counter() if track_metrics else None
 
     orchestrator_chain = (
@@ -145,12 +150,14 @@ def get_single_web_search_chain_response_stream(
 
 
 def get_simple_chain_response_stream(
-    orchestrator_llm: Runnable,
-    summarizer_llm: Runnable,
-    user_query: str,
-    chat_history: str,
-    track_metrics: bool = True,
+    config: ChainConfig,
+    inputs: ChainInputs,
 ) -> Iterator[str]:
+    summarizer_llm = config.summarizer_llm
+    track_metrics = config.track_metrics
+    user_query = inputs.user_query
+    chat_history = inputs.chat_history
+
     start_time: float | None = perf_counter() if track_metrics else None
 
     simple_summarizer_chain = (

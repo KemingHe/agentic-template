@@ -32,19 +32,10 @@ def validate_env(env_name: str) -> str:
 if not load_dotenv():
     warn("No .env file found, assuming environment variables are injected")
 
-# Groq configuration
-GROQ_API_KEY = validate_env("GROQ_API_KEY")
-
 # OpenAI configuration
 OPENAI_API_KEY = validate_env("OPENAI_API_KEY")
 OPENAI_LITE_MODEL_ID = validate_env("OPENAI_LITE_MODEL_ID")
 OPENAI_REGULAR_MODEL_ID = validate_env("OPENAI_REGULAR_MODEL_ID")
-OPENAI_PREMIUM_MODEL_ID = validate_env("OPENAI_PREMIUM_MODEL_ID")
-
-# Anthropic configuration
-ANTHROPIC_API_KEY = validate_env("ANTHROPIC_API_KEY")
-ANTHROPIC_LITE_MODEL_ID = validate_env("ANTHROPIC_LITE_MODEL_ID")
-ANTHROPIC_REGULAR_MODEL_ID = validate_env("ANTHROPIC_REGULAR_MODEL_ID")
 
 # Pinecone configuration
 PINECONE_API_KEY = validate_env("PINECONE_API_KEY")

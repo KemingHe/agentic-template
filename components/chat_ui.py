@@ -2,7 +2,8 @@ from typing import List, Callable, Iterator
 
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
-from langchain_core.runnables import Runnable
+
+from chains.types import ChainInputs
 
 
 def init_chat_history(history_key: str = "chat_history") -> None:
@@ -25,11 +26,8 @@ def is_valid_query(user_query: str) -> bool:
     return user_query is not None and user_query.strip() != ""
 
 
-# TODO: strongly type the get_response_stream function
 def setup_simple_chat(
-    orchestrator_llm: Runnable,
-    summarizer_llm: Runnable,
-    get_response_stream: Callable[..., Iterator[str]],
+    response_stream: Callable[[ChainInputs], Iterator[str]],
 ) -> None:
     init_chat_history()
 
@@ -47,11 +45,11 @@ def setup_simple_chat(
             st.markdown(user_query)
 
         with st.chat_message("ai"):
-            response_stream = get_response_stream(
-                orchestrator_llm=orchestrator_llm,
-                summarizer_llm=summarizer_llm,
-                user_query=user_query,
-                chat_history=chat_history,
+            response_stream = response_stream(
+                inputs=ChainInputs(
+                    user_query=user_query,
+                    chat_history=chat_history,
+                ),
             )
             ai_response = st.write_stream(response_stream)
 
